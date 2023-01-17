@@ -59,8 +59,8 @@ public class SkydiverService {
                 skydiver.getId(),
                 skydiver.getName(),
                 skydiver.getSurname(),
-
-                new ParachuteResponse(parachute.getId(), parachute.getName(), parachute.getSize()));
+                parachuteMapper.map(parachute));
+                //new ParachuteResponse(parachute.getId(), parachute.getName(), parachute.getSize()));
     }
 
     public List<SkydiverResponse> getAll() {
