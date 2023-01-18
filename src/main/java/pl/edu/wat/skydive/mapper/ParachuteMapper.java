@@ -17,7 +17,9 @@ public class ParachuteMapper {
     }
 
     private void fillParachuteRequest(Parachute parachute, ParachuteRequest parachuteRequest) {
+    }
 
+    private void fillParachute(ParachuteResponse parachuteResponse, Parachute parachute) {
     }
 
     public ParachuteResponse map(Parachute parachute) {
@@ -25,9 +27,4 @@ public class ParachuteMapper {
         fillParachute(parachuteResponse, parachute);
         return parachuteResponse;
     }
-
-    private void fillParachute(ParachuteResponse parachuteResponse, Parachute parachute) {
-
-    }
-
 }

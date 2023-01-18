@@ -1,5 +1,6 @@
 package pl.edu.wat.skydive.service;
 
+import com.ibm.icu.impl.CalType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,10 +30,6 @@ public class SkydiverService {
         this.parachuteMapper = parachuteMapper;
     }
 
-    public Optional<ParachuteResponse> getParachuteById(String id) {
-        return parachuteRepository.findById(id).map(parachuteMapper::map);
-    }
-
     public SkydiverResponse getSkydiverById(String id) throws EntityNotFound {
         Skydiver skydiver = skydiverRepository.findById(id).orElseThrow(EntityNotFound::new);
         Parachute parachute = parachuteRepository.findById(skydiver.getParachuteId()).orElseThrow(EntityNotFound::new);
@@ -42,7 +39,6 @@ public class SkydiverService {
                 skydiver.getName(),
                 skydiver.getSurname(),
                 parachuteMapper.map(parachute));
-                //new ParachuteResponse(parachute.getId(), parachute.getName(), parachute.getSize()));
     }
 
     public SkydiverResponse save(SkydiverRequest skydiverRequest) throws EntityNotFound {
@@ -60,7 +56,6 @@ public class SkydiverService {
                 skydiver.getName(),
                 skydiver.getSurname(),
                 parachuteMapper.map(parachute));
-                //new ParachuteResponse(parachute.getId(), parachute.getName(), parachute.getSize()));
     }
 
     public List<SkydiverResponse> getAll() {
@@ -76,8 +71,11 @@ public class SkydiverService {
         try {
             Parachute parachute = parachuteRepository.findById(skydiver.getParachuteId()).orElseThrow(EntityNotFound::new);
             return Optional.of(
-                    new SkydiverResponse(skydiver.getId(), skydiver.getName(),skydiver.getSurname(), new ParachuteResponse(parachute.getId(), parachute.getName(), parachute.getSize()))
-            );
+                        new SkydiverResponse(
+                            skydiver.getId(),
+                            skydiver.getName(),
+                            skydiver.getSurname(),
+                            parachuteMapper.map(parachute)));
         } catch (EntityNotFound e) {
             return Optional.empty();
         }
@@ -94,12 +92,14 @@ public class SkydiverService {
         skydiver.setName(skydiverRequest.getName());
         skydiver.setSurname(skydiverRequest.getSurname());
 
-        Parachute parachute = parachuteRepository.findById(skydiverRequest.getParachuteId()).orElseThrow(EntityNotFound::new);
+        Parachute parachute = parachuteRepository.findById(skydiverRequest.getParachuteId())
+                .orElseThrow(EntityNotFound::new);
 
         skydiver.setParachuteId(parachute.getId());
         skydiver = skydiverRepository.save(skydiver);
 
-        return new SkydiverResponse(skydiver.getId(), skydiver.getName(), skydiver.getSurname(), new ParachuteResponse(parachute.getId(), parachute.getName(), parachute.getSize()));
+        return new SkydiverResponse(skydiver.getId(), skydiver.getName(), skydiver.getSurname(),
+                new ParachuteResponse(parachute.getId(), parachute.getName(), parachute.getSize()));
     }
 
     public void delete(String id) throws EntityNotFound {
@@ -108,5 +108,4 @@ public class SkydiverService {
         }
         skydiverRepository.deleteById(id);
     }
-
 }

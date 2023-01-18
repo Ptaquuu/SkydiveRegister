@@ -32,7 +32,7 @@ public class ParachuteController {
         return new ResponseEntity<>(parachuteOptional, HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ParachuteResponse> getParachuteByIdVar(@PathVariable String id) {
         Optional<ParachuteResponse> parachuteOptional = parachuteService.getParachuteById(id);
         if (parachuteOptional.isEmpty()) {
@@ -41,8 +41,8 @@ public class ParachuteController {
         return new ResponseEntity<>(parachuteOptional.get(), HttpStatus.OK);
     }
 
-    @GetMapping("{id}/size")
-    public ResponseEntity<String> getParachuteSurnameById(@PathVariable String id) {
+    @GetMapping("/{id}/size")
+    public ResponseEntity<String> getParachuteSizeById(@PathVariable String id) {
         Optional<ParachuteResponse> parachuteOptional = parachuteService.getParachuteById(id);
         if (parachuteOptional.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -55,7 +55,7 @@ public class ParachuteController {
         return new ResponseEntity<>(parachuteService.save(parachuteRequest).getId(), HttpStatus.CREATED);
     }
 
-    @PutMapping("{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<ParachuteResponse> updateParachute(@PathVariable String id, @RequestParam(required = false) String name, @RequestParam(required = false) String size) {
         try {
             return new ResponseEntity<>(parachuteService.update(id, name, size), HttpStatus.OK);
@@ -63,7 +63,8 @@ public class ParachuteController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-    @DeleteMapping("{id}")
+
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteParachute(@PathVariable String id) {
         try {
             parachuteService.delete(id);

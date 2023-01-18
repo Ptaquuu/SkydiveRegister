@@ -9,10 +9,5 @@ public class Parachute {
     private String id;
     private String name;
     private String size;
-
-    /*public Parachute (String name, String size){
-        this.name = name;
-        this.size = size;
-    }*/
 }
 

@@ -4,14 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.wat.skydive.dto.ParachuteRequest;
-import pl.edu.wat.skydive.dto.ParachuteResponse;
 import pl.edu.wat.skydive.dto.SkydiverRequest;
 import pl.edu.wat.skydive.dto.SkydiverResponse;
 import pl.edu.wat.skydive.exception.EntityNotFound;
 import pl.edu.wat.skydive.service.SkydiverService;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @CrossOrigin
@@ -30,6 +29,15 @@ public class SkydiverController {
         return new ResponseEntity<>(parachuteOptional, HttpStatus.OK);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<SkydiverResponse> getSkydiverByIdVar(@PathVariable String id) throws EntityNotFound {
+        Optional<SkydiverResponse> skydiverOptional = Optional.ofNullable(skydiverService.getSkydiverById(id));
+        if (skydiverOptional.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(skydiverOptional.get(), HttpStatus.OK);
+    }
+
     @PostMapping()
     public ResponseEntity<String> createSkydiver(@RequestBody SkydiverRequest parachuteRequest) {
         try {
@@ -38,6 +46,7 @@ public class SkydiverController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @PutMapping("/{id}")
     public ResponseEntity<SkydiverResponse> updateSkydiver(@PathVariable String id,@RequestBody SkydiverRequest skydiverRequest) {
         try {
@@ -46,6 +55,7 @@ public class SkydiverController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSkydiver(@PathVariable String id) {
         try {
